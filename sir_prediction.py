@@ -13,7 +13,7 @@ import worldometer_scrapping
 
 # Global Variables
 # Population of simulation
-N = 7.79 * 10**9  # Here, it is the population of the entire planet
+N = 6.4 * 10**9  # Here, it is the population of the entire planet, without China
 # 15th of March
 timestamp = 1585091136 - 10 * 24 * 3600  # 15th of March
 T_START = datetime.date.fromtimestamp(timestamp)
