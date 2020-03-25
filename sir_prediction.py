@@ -17,18 +17,18 @@ N = 7.79 * 10**9  # Here, it is the population of the entire planet
 # Current date
 T_START = datetime.date.today()
 """ Source of data: https://www.worldometers.info/coronavirus/"""
-total_list = [463387]
-new_cases_list = [43000]
-deaths_list = [20912]
-R_list = [134714]
+# For the 25th of March 2020
+total_list = [467000]
+new_cases_list = [45000]
+deaths_list = [21200]
+R_list = [135000]
 I_list = [total_list[0] - R_list[0]]
 S_list = [N - I_list[0] - R_list[0]]
 date_list = [T_START]
 
 death_rate = deaths_list[0] / R_list[0]
 
-R0 = 2.28  # Basic Reproductive Rate
-R0 = 1.1
+R0 = 2.15  # Basic Reproductive Rate
 days_of_infectivity = 12
 recovery_rate = 1 / days_of_infectivity
 transmission_rate = R0 * recovery_rate
@@ -36,11 +36,11 @@ transmission_rate = R0 * recovery_rate
 vaccine = False
 
 
-def sir_method(b=transmission_rate, k=recovery_rate, duration=1865):
+def sir_method(b=transmission_rate, k=recovery_rate, duration=90):
 
     for i in range(duration):
         # Calculating the date i + 1 days after today
-        date = datetime.date.fromtimestamp(time.time() + (i + 1) * 24 * 3600)
+        date = datetime.date.fromtimestamp(time.time() + (i - 4) * 24 * 3600)
         date_list.append(date)
 
         if i > 500 and vaccine is True:
