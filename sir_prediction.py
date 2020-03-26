@@ -45,7 +45,7 @@ def sir_method(b=transmission_rate, k=recovery_rate, duration=20):
         date = datetime.date.fromtimestamp(timestamp + (j+1) * 24 * 3600)
         date_list.append(date)
 
-        # Vaccination in day 500
+        # Vaccination in day 500, all the population is vaccinated in a year
         if j > 500 and vaccine is True:
             S_list[-1] = S_list[-1] - S_list[490]/365
             if S_list[-1] < 0:
