@@ -14,49 +14,122 @@ from bs4 import BeautifulSoup
 import json
 import pandas as pd
 import re
-import pandas as pd
+import datetime
+import os
+import sys
 
 
-def world_data():
+def up_to_date(scope="world"):
+    for file in os.listdir(".\\data"):
+        if file.endswith(".txt"):
+            if file.split(".")[0] == str(datetime.date.fromtimestamp(time.time() - 30 * 3600)) + scope:
+                return True, file
+    return False, None
 
+
+def write_in_file(data, scope="world"):
+    file = open(".\\data\\" + str(datetime.date.fromtimestamp(time.time() - 30 * 3600)) + scope + ".txt", "w")
+
+    for key in data:
+        file.write(key + "\n")
+        if type(data[key]) == dict:
+            for key2 in data[key]:
+                file.write(key2 + "\n")
+                file.write(str(data[key][key2]) + "\n")
+        elif type(data[key]) == list:
+            for val in data[key]:
+                file.write(str(val) + "\n")
+    return
+
+
+def read_from_file(file):
+    data = {"demographics": {"population": None}, "cases": [],
+            "deaths": [], "recovered": [], "active": []}
+    f = open(".\\data\\" + file, "r")
+
+    for line in f:
+        line = line.rstrip()
+
+        try:
+            number = int(line)
+        except ValueError:
+            flag = line
+            continue
+
+        if flag == "population":
+            data["demographics"]["population"] = number
+        else:
+            data[flag].append(number)
+    return data
+
+
+def world_demographic_data(scope="world"):
     LINK = "https://www.worldometers.info/world-population/population-by-country/"
-	
     response = requests.get(LINK)
     soup = BeautifulSoup(response.text)
     table = soup.findAll("tbody")
     rows = [i for i in table[0].findAll("tr")]
     data = []
+
     for k in rows:
         elements = k.findAll("td")
-        data.append({"Country" : elements[1].find("a").contents[0],
+        data.append({"Country": elements[1].find("a").contents[0],
                      "Population": int(elements[2].contents[0].replace(",","")),
-                     "Density" : elements[5].contents[0],
-                     "Age" : elements[9].contents[0],
-                     "Urban" : float(elements[11].contents[0][:-2])/100  })
-    return pd.DataFrame(data)
+                     "Density": elements[5].contents[0],
+                     "Age": elements[9].contents[0],
+                     "Urban": float(elements[11].contents[0][:-2])/100})
+
+    df_temp = pd.DataFrame(data)
+    world_dem = df_temp.set_index("Country", drop=False)
+
+    if scope == "world":
+        data = world_dem
+    elif scope == "US":
+        data = world_dem.loc(axis=0)["United States", "Population"]
+    else:
+        data = world_dem.loc(axis=0)[scope, "Population"]
+
+    return data
+
 
 def country_daily_data(country):
-    link = "https://www.worldometers.info/coronavirus/" + country 
+    link = "https://www.worldometers.info/coronavirus/country/" + country
     response = requests.get(link)
     soup = BeautifulSoup(response.text)
+    if "<title>404 Not Found</title>" in str(soup):
+        print("Sorry, country not found!")
+        sys.exit(1)
 
-    #We assume that the chart we want is the 11th script in the site !HIGH RISK TO BRAKE!
-    js = soup.findAll("script", {"type" : "text/javascript"})[10].text.replace('\n', '').split(";")[1]
+    js = soup.findAll("script", {"type": "text/javascript"})
+    for i, obj in enumerate(js):
+        if "coronavirus-cases-linear" in str(obj):
+            cases_graph = soup.findAll("script", {"type": "text/javascript"})[i].text.replace('\n', '').split(";")[1]
+        if "coronavirus-deaths-linear" in str(obj):
+            deaths_graph = soup.findAll("script", {"type": "text/javascript"})[i].text.replace('\n', '').split(";")[1]
+        if "text: 'Active Cases'" in str(obj):
+            active_graph = soup.findAll("script", {"type": "text/javascript"})[i].text.replace('\n', '')
 
-    #regular exp to extract the data and the values from Highcharts.chart
-    values = re.findall('data: \[[0-9,]*\]', js)[0].split(": ")[1][1:-1].split(",")
-    dates = re.findall('categories: \[[A-Za-z0-9," ]*\]', js)[0].split(": ")[1][1:-1].split(",")
+    cases = re.findall('data: \[[0-9,]*\]', cases_graph)[0].split(": ")[1][1:-1].split(",")
+    deaths = re.findall('data: \[[0-9,]*\]', deaths_graph)[0].split(": ")[1][1:-1].split(",")
+    active = re.findall('data: \[[0-9,]*\]', active_graph)[0].split(": ")[1][1:-1].split(",")
 
-    dates = [i.strip('"') for i in dates]
-    values = [int(i) for i in values]
+    cases = [int(i) for i in cases]
+    deaths = [int(i) for i in deaths]
+    active = [int(i) for i in active]
 
-    return dict(zip(dates, values))
+    if country != "china":
+        padding = [0 for i in range(24)]
+        cases = padding + cases
+        deaths = padding + deaths
+        active = padding + active
+
+    return cases, deaths, active
+
 
 def main_page_scrape():
-
-	LINK = "https://www.worldometers.info/coronavirus/"
-
-    COL = ["Country","Total_Cases","New_Cases","Total_Deaths","New_Deaths","Total_Recovered","Active_Cases","Serious_Critical","Total_per_1M"]
+    LINK = "https://www.worldometers.info/coronavirus/"
+    COL = ["Country","Total_Cases","New_Cases","Total_Deaths","New_Deaths",
+           "Total_Recovered","Active_Cases","Serious_Critical","Total_per_1M"]
     links = {}
     rows = []
 
@@ -75,9 +148,89 @@ def main_page_scrape():
         dic ={COL[0] : con}
         for k,c in zip(row[1:], COL[1:]):
             try:
-                dic = {**dic, **{c : k.contents[0]}}
+                dic = {**dic, **{c: k.contents[0]}}
             except:
                 pass
         rows.append(dic)
     
     return links, pd.DataFrame(rows)
+
+
+def world_daily_data():
+    LINK = "https://www.worldometers.info/coronavirus/"
+
+    response = requests.get(LINK)
+    soup = BeautifulSoup(response.text)
+
+    js = soup.findAll("script", {"type": "text/javascript"})
+    for i, obj in enumerate(js):
+        if "cases" in str(obj):
+            cases_graph = soup.findAll("script", {"type": "text/javascript"})[i].text.replace('\n', '').split(";")[1]
+
+    # regular exp to extract the data and the values from Highcharts.chart
+    values = re.findall('data: \[[0-9,]*\]', cases_graph)[0].split(": ")[1][1:-1].split(",")
+
+    values = [int(i) for i in values]
+
+    LINK = "https://www.worldometers.info/coronavirus/coronavirus-death-toll/"
+    response = requests.get(LINK)
+    soup = BeautifulSoup(response.text)
+
+    js = soup.findAll("script", {"type": "text/javascript"})
+    for i, obj in enumerate(js):
+        if "deaths-linear" in str(obj):
+            deaths_graph = soup.findAll("script", {"type": "text/javascript"})[i].text.replace('\n', '').split(";")[1]
+
+    values_d = re.findall('data: \[[0-9,]*\]', deaths_graph)[0].split(": ")[1][1:-1].split(",")
+    values_d = [int(i) for i in values_d]
+
+    LINK = "https://www.worldometers.info/coronavirus/coronavirus-cases/"
+    response = requests.get(LINK)
+    soup = BeautifulSoup(response.text)
+
+    js = soup.findAll("script", {"type": "text/javascript"})
+    for i, obj in enumerate(js):
+        if "active" in str(obj):
+            active_graph = soup.findAll("script", {"type": "text/javascript"})[i].text.replace('\n', '')
+
+    # regular exp to extract the data and the values from Highcharts.chart
+    values_a = re.findall('data: \[[0-9,]*\]', active_graph)[0].split(": ")[1][1:-1].split(",")
+    values_a = [int(i) for i in values_a]
+
+    return values, values_d, values_a
+
+
+def mine_data(scope="world"):
+
+    updated, file = up_to_date(scope=scope)
+
+    if not updated:
+        df_temp = world_demographic_data(scope=scope)
+
+        if scope == "world":
+            world_popul = sum(df_temp.loc[:, "Population"])
+            cases, deaths, active_cases = world_daily_data()
+            recov = []
+            for i, val in enumerate(active_cases):
+                recov.append(cases[i] - val)
+            data = {"demographics": {"population": world_popul}, "cases": cases,
+                    "deaths": deaths, "recovered": recov, "active": active_cases}
+        else:
+            population = df_temp
+            cases, deaths, active_cases = country_daily_data(scope.lower())
+            recov = []
+            for i, val in enumerate(active_cases):
+                recov.append(cases[i] - val)
+            data = {"demographics": {"population": population}, "cases": cases,
+                    "deaths": deaths, "recovered": recov, "active": active_cases}
+
+        write_in_file(data, scope=scope)
+
+    else:
+        data = read_from_file(file)
+
+    return data
+
+
+
+
