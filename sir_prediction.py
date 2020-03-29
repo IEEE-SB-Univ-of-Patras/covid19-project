@@ -12,7 +12,7 @@ import numpy as np
 import worldometer_scrapping
 
 # Global variables
-R0 = 2.5  # Basic Reproductive Rate, number of transmissions/infected person in a 100% susceptible population.
+R0 = 2.45  # Basic Reproductive Rate, number of transmissions/infected person in a 100% susceptible population.
 days_of_infectivity = 10  # period during which the infected remain infectious
 recovery_rate = 1 / days_of_infectivity
 transmission_rate = R0 * recovery_rate  # Number of transmissions per infected person per day
@@ -210,14 +210,19 @@ def plotting(data, selection, scale="log"):
     ax.set(xlabel='Days', ylabel=str(selection),
            title='Flatten the curve, folks')
     ax.grid()
-    # fig.savefig("test.png")
+
+    name = ".\\results\\"
+    for sel in selection:
+        name += (sel + ", ")
+    name = name + str(dates[-1]) + ".png"
+    fig.savefig(name)
     plt.show()
 
 
 if __name__ == '__main__':
 
     Data = init_data(scenario="without China")
-    Data = sir_method(Data, offset=25, run=40)
-    plotting(Data, ["S list", "R list", "Deaths list", "I list"])
+    Data = sir_method(Data, offset=25, run=25)
+    plotting(Data, ["Total list", "Deaths list", "I list"], scale='linear')
 
 
