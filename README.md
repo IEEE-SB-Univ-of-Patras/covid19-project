@@ -1,7 +1,7 @@
 # Coronavirus-Basic-Model
 
 A basic mathematical tool for predicting the spread of the Covid-19 pandemic, using the SIR model for infectious
-diseases. It was created by @Frankkie and @ilias1111
+diseases. It was created by Chistos Frantzolas and Ilias Xenogiannis.
 This project can run with versions of Python above 3.5.2. You can install the complete requirements by using the
 command 'pip install -r requirements.txt'. [a]
 
