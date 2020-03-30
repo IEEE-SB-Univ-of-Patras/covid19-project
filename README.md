@@ -36,6 +36,21 @@ You can find more information about the SIR model in the resources [3], [4].
 
 ## Ideas for the Future
 
+As the project is in its very early stages, there is much room for improvement. You can contribute to it by:
+1. Improving the data collection or expanding it through other sources to encompass things like:
+   1. Measures taken by governments.
+   1. Hospital capacity in each country.
+   1. Deviding populations by groups.
+   1. Testing numbers.
+   1. Dividing countries into smaller areas.
+1. Improving the model itself:
+   1. Figure out different trends in the data.
+   1. Calculate the transmission rate in different conditions (climate, measures etc.)
+   1. Use different models to simulate the effects of different preventative measures.
+1. Improving the presentation of the simulation.
+   1. Create an animation through time.
+   1. Make maps that demonstrate the spread of the disease.
+1. And anything else that comes to mind!
 
 ## FAQ
 
