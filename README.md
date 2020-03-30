@@ -28,8 +28,23 @@ The differential equations that describe the model are as follows: [1]
 
 You can find more information about the SIR model in the resources [3], [4].
 
+Note that there are 2 parameters we don't know the values of (β, γ, presented as b and k in the code respectively). We can estimate the number of days each person remain infectious and thus have the recovery rate be the inverse of this period. On the other hand, there are studies on the R0 (basic reproductive rate) of the novel coronavirus, which is the number of people an infectious person is going to transmit the virus to in total. The R0 of Covid-19 is estimated to be 2.06 to 2.52. [5] Then, we can calculate b, with the equation:
+
+![Image of R0 equation](https://wikimedia.org/api/rest_v1/media/math/render/svg/4aae42f8253a395c52a798a9ad5a7e4adb6fceea)
+
+Of course, b is not going to remain constant. Preventative measures like social distancing, lockdowns and better hygiene limit possible contacts that end up transmitting the virus, thus reducing b. On the other hand, environmental factors can also have an impact on the transmission rate of an infectious disease, although it's not yet certain how this will affect the Covid-19 epidemic.
+
 ## Scrapping Data
 
+The population data and the Covid-19 confirmed cases and deaths data is taken from Worldometers.
+
+More specifically, the population data by country, along with data for age, urbanization, density etc. are taken from [6].
+The total confirmed cases of Coronavirus for the entire planet is taken from the "Total Cases" graph on [7], the daily total death toll from the "Total Deaths" graph on [8] and the active cases day-by-day are taken from the "Active Cases" graph on [9].
+Finally, data for each specific country is taken from their respective graphs in each country's page, if there is one. p.e. China [10]
+
+The graphs on the site is updated approximately every 24 hours. Thus, if the model runs a scenario it hasn't run in the last 30 hours it will update its data base (simple text files for the time being). In any other case, it will simply read data from the corresponding files.
+
+In order to understand the scrapping function you need to know some basic things about the regular expressions module of Python 3 [11]
 
 ## Running the Model
 
@@ -61,6 +76,13 @@ As the project is in its very early stages, there is much room for improvement. 
 2. https://www.maa.org/press/periodicals/loci/joma/the-sir-model-for-spread-of-disease-the-differential-equation-model
 3. https://www.youtube.com/watch?v=k6nLfCbAzgo
 4. https://www.youtube.com/watch?v=gxAaO2rsdIs
+5. https://www.ijidonline.com/article/S1201-9712(20)30091-6/fulltext
+6. https://www.worldometers.info/world-population/population-by-country/
+7. https://www.worldometers.info/coronavirus/
+8. https://www.worldometers.info/coronavirus/coronavirus-death-toll/
+9. https://www.worldometers.info/coronavirus/coronavirus-cases/
+10. https://www.worldometers.info/coronavirus/country/china/
+11. https://docs.python.org/3/library/re.html
 
 ### Extra
 
