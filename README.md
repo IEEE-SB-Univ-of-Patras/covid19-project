@@ -85,5 +85,5 @@ As the project is in its very early stages, there is much room for improvement. 
 
 ### Extra
 
-a. https://pip.pypa.io/en/latest/user_guide/#requirements-files
-b. https://docs.python.org/3/library/re.html
+1. https://pip.pypa.io/en/latest/user_guide/#requirements-files
+1. https://docs.python.org/3/library/re.html
