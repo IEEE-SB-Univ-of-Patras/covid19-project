@@ -70,8 +70,9 @@ Data = init_data(scenario="without China")
 Data = sir_method(Data, offset=25, run=25)
 plotting(Data, ["Total list", "Deaths list", "I list"], scale='linear')
 ```
+The output plot is this, on the 30th of March 2020:
 
-The output plot is this:
+![Image of results plot](https://github.com/Frankkie/Coronavirus-Basic-Model/blob/master/results/Total%20list%2C%20Deaths%20list%2C%20I%20list%2C%202020-03-29.png)
 
 ## Ideas for the Future
 
