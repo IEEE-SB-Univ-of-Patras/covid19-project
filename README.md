@@ -44,7 +44,7 @@ Finally, data for each specific country is taken from their respective graphs in
 
 The graphs on the site is updated approximately every 24 hours. Thus, if the model runs a scenario it hasn't run in the last 30 hours it will update its data base (simple text files for the time being). In any other case, it will simply read data from the corresponding files.
 
-In order to understand the scrapping function you need to know some basic things about the regular expressions module of Python 3 [11]
+In order to understand the scrapping function you need to know some basic things about the regular expressions module of Python 3 [b]
 
 ## Running the Model
 
@@ -82,8 +82,8 @@ As the project is in its very early stages, there is much room for improvement. 
 8. https://www.worldometers.info/coronavirus/coronavirus-death-toll/
 9. https://www.worldometers.info/coronavirus/coronavirus-cases/
 10. https://www.worldometers.info/coronavirus/country/china/
-11. https://docs.python.org/3/library/re.html
 
 ### Extra
 
 a. https://pip.pypa.io/en/latest/user_guide/#requirements-files
+b. https://docs.python.org/3/library/re.html
