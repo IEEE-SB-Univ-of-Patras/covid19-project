@@ -120,6 +120,9 @@ def sir_method(data, b=transmission_rate, k=recovery_rate, offset=0, run=90):
             -run (keyword, int): Amount of days after the offset date that the model runs for.
     """
 
+    if offset <= 0:
+        offset = 1
+
     N = data["N"]  # Population of scenario
     # "Extracting" the lists from the data dictionary
     date_list = data["Date list"][:-offset]  # Dates as timestamps
@@ -222,5 +225,3 @@ if __name__ == '__main__':
     Data = init_data(scenario="without China")
     Data = sir_method(Data, offset=25, run=25)
     plotting(Data, ["Total list", "Deaths list", "I list"], scale='linear')
-
-
