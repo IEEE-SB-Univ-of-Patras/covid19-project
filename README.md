@@ -3,7 +3,7 @@
 A basic mathematical tool for predicting the spread of the Covid-19 pandemic, using the SIR model for infectious
 diseases. It was created by Chistos Frantzolas and Ilias Xenogiannis.
 This project can run with versions of Python above 3.5.2. You can install the complete requirements by using the
-command 'pip install -r requirements.txt'. [a]
+command 'pip install -r requirements.txt'. [Extra 1]
 
 **Disclaimer:** Neither I nor anyone that currently works on this project is an epidimiologist.
 This project has been built for purely academic purposes.
@@ -44,7 +44,7 @@ Finally, data for each specific country is taken from their respective graphs in
 
 The graphs on the site is updated approximately every 24 hours. Thus, if the model runs a scenario it hasn't run in the last 30 hours it will update its data base (simple text files for the time being). In any other case, it will simply read data from the corresponding files.
 
-In order to understand the scrapping function you need to know some basic things about the regular expressions module of Python 3 [b]
+In order to understand the scrapping function you need to know some basic things about the regular expressions module of Python 3 [Extra 2]
 
 ## Running the Model
 
