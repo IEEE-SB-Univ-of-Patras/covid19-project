@@ -48,26 +48,28 @@ In order to understand the scrapping function you need to know some basic things
 
 ## Running the Model
 
-You can run the model from the main file "sir_prediction.py". Initialize your scenario and data with the init_data() function, run the model with sir_method() and plot them with the function plotting(). There is extensive documentation on the py files themselves, but we can walk through an example here.
+You can run the model from the main file "sir_prediction.py". Initialize your scenario and data with the `init_data()` function, run the model with `sir_method()` and plot them with the function `plotting()`. There is extensive documentation on the py files themselves, but we can walk through an example here.
 
 ### Initializing Data
 The init_data function takes a single keyword argument `scenario` with a default value "world". 
 There are scenarios for many countries, like "US" for the United States, "China" or "Greece". The way that countries are named in the url of the worldometers website and the demographic data table differs in some cases. If a country's data do not load properly you most likely have to create a special case for it.
 There is also the scenario "without China" which excludes Chinese cases from worldwide data, as the country is an "outlier", both by being hit first, and also taking extraordinary measures pretty early. 
-The data variable that the init_data() function returns is a Python Dictionary. You can find its keys and structure in the documentation.
+The data variable that the `init_data()` function returns is a Python Dictionary. You can find its keys and structure in the documentation.
 
 ### Running the model
 The sir_method function, takes three arguments; data, the same python dictionary that the init_data() function outputs, offset and run.
 The offset argument specifies how many days before the present date should the model start its prediction (an offset of one means that the model starts running from the current date. The argument run specifies for how many days after the offset date should the model make predictions for. The output is the updated Data dictionary. 
 
 ### Plotting the results
-The plotting() function takes as arguments the data to be plotted, the list "selection" that should contain the dictionary keys of the data that you want to plot, and the "scale" keyword argument, which specifies the scale of the y axis (either "linear" or "log")
+The `plotting()` function takes as arguments the data to be plotted, the list "selection" that should contain the dictionary keys of the data that you want to plot, and the "scale" keyword argument, which specifies the scale of the y axis (either "linear" or "log")
 
 ### Example
 Let's see an example of the "without China" scenario, which begins prediction 25 days from the present, to the present day:
-`Data = init_data(scenario="without China")`
-`Data = sir_method(Data, offset=25, run=25)`
-`plotting(Data, ["Total list", "Deaths list", "I list"], scale='linear')`
+```
+Data = init_data(scenario="without China")
+Data = sir_method(Data, offset=25, run=25)
+plotting(Data, ["Total list", "Deaths list", "I list"], scale='linear')
+```
 
 The output plot is this:
 
