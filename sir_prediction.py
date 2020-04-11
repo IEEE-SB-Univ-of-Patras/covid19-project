@@ -102,6 +102,7 @@ def init_data(scenario="world"):
     data = {"N": n, "T start": timestamp_start, "Total list": total_list, "Deaths list": deaths_list,
             "R list": R_list, "I list": I_list, "S list": S_list, "New cases list": new_cases_list,
             "Date list": date_list, "Death rate": death_rate}
+    print(data)
     return data
 
 
@@ -222,6 +223,6 @@ def plotting(data, selection, scale="log"):
 
 if __name__ == '__main__':
 
-    Data = init_data(scenario="without China")
+    Data = init_data(scenario="world")
     Data = sir_method(Data, offset=25, run=25)
     plotting(Data, ["Total list", "Deaths list", "I list"], scale='linear')
