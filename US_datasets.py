@@ -5,7 +5,7 @@ from datetime import date
 import requests
 from bs4 import BeautifulSoup
 
-
+'''by city functions return a dict of dataframes'''
 
 ''' returns a dict containing each US state and its 2 letter abbreviation'''
 def US_abbreviations():
@@ -86,7 +86,7 @@ def US_interventions_by_state():
         
 '''contains the number of people visiting  places of interest such as hospitals supermarkets etc, for each US city from 1/3 to 21/3'''
 def US_poi_visits():
-    
+    FIPS=US_FIPS()
     us_poi_visits=pd.read_csv(r"covid19/poi_visits.csv").set_index("FIPS")
     '''added columns of US state and city it belongs'''
     us_poi_visits['state'] = None
@@ -101,7 +101,7 @@ def US_poi_visits():
 
 
 def US_poi_visits_by_state():
-    
+    FIPS=US_FIPS()
     us_poi_visits=pd.read_csv(r"covid19/poi_visits.csv").set_index("FIPS")
     
     us_poi_visits['state'] = None
