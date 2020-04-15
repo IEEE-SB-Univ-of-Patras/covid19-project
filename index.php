@@ -30,9 +30,11 @@
 	 		<h1 class="title1"><a href="index.php" > Covid-19 SIR Model</a></h1>
 	 	</div>
 	 	<div class="navBar"> <!-- Horizontal Navigation Bar-->
-	 		<label>Prediction</label>
-	 		<label>Comparison</label>
-	 		<label>Infectivity</label>
+	 		<label><a href="prediction.php">Prediction</a></label>
+	 		<label><a href="comparison.php">Comparison</a></label>
+	 		<label><a href="infectivity.php"> Infectivity</a></label>
+	 		<label><a href="customscenario.php">Custon Scenario</a></label>
+	 		<label><a href="about.php">About</a></label>
 	 		<label>More</label>
 	 	</div>
 	 	<div class="sideBar"><!-- Vertical Sidebar Bar-->
@@ -311,6 +313,7 @@
 		 		
 		 		
 		 		<!-- visualization area-->
+		 		
 		 		<div>
 		 			<?php
 		 				$formFile=fopen('Resources/formHandling.txt', 'r') or die("Can't Locate File");
@@ -337,17 +340,7 @@
 		 						cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
 		 						proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 		 					</div><?php
-		 				}
-		 				/*echo 'here';
-		 				$formCountry=$_POST['country'];
-		 				$formStartingDate=$_POST['startingDate']
-		 				$formEndingDate=$_POST['endingDate']
-		 				if($formEndingDate==''  && $formStartingDate==''){
-		 					
-		 					echo 'empty';
-		 				}else {
-		 					echo 'not empty'
-		 				}*/
+		 				} 
 
 		 			?>
 		 	</div>
