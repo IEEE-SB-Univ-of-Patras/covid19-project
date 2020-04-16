@@ -16,5 +16,5 @@ mobility_countries=mobility_countries.drop(columns=["transportation_type"]).grou
 ''' creating a csv for each dataframe and saving them in the cleaned_datasets folder'''
 data={"general_country":general,"mobility_countries":mobility_countries}
 for i in data:
-    data[i].to_csv ('cleaned_datasets\\' + i + '.csv', index = False, header=True)
+    data[i].to_csv ('cleaned_datasets\\' + i + '.csv', index = True, header=True)
 
