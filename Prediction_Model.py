@@ -9,9 +9,7 @@ from sklearn.utils import shuffle
 import math
 import sklearn.metrics as met
 from sklearn.linear_model import RidgeCV
-import US_datasets
-import pandas
-import global_data
+
 
 ######################################
 import warnings
@@ -302,8 +300,6 @@ def model():
     plt.show()
 
     return 0
-
-
 
 
 settings()
