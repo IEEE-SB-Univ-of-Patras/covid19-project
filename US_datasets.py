@@ -5,7 +5,7 @@ from datetime import date
 import requests
 from bs4 import BeautifulSoup
 
-'''by city functions return a dict of dataframes'''
+
 
 ''' returns a dict containing each US state and its 2 letter abbreviation'''
 def US_abbreviations():
@@ -25,7 +25,7 @@ def US_abbreviations():
 '''returns a dataframe containing the cumulative sum of infections per day of each US city after some minor cleaning of the original csv'''
 def US_infections_by_city():
     
-    us_infections=pd.read_csv(r"covid19/infections_timeseries.csv").drop(columns=["FIPS"])
+    us_infections=pd.read_csv(r"covid19_datasets/infections_timeseries.csv").drop(columns=["FIPS"])
     us_infections['state'] = us_infections.apply(lambda row: str(row.Combined_Key).split('-')[1].strip(' '), axis = 1)#added a state column
     
     return dict(tuple(us_infections.groupby('state')))#contains each state and its corresponding cities
@@ -33,7 +33,7 @@ def US_infections_by_city():
 '''returns a dataframe containing the cumulative sum of infections per day of each US state after some minor cleaning of the original csv'''
 def US_infections_by_state():
     
-    us_infections=pd.read_csv(r"covid19/infections_timeseries.csv").drop(columns=["FIPS"])
+    us_infections=pd.read_csv(r"covid19_datasets/infections_timeseries.csv").drop(columns=["FIPS"])
     us_infections['state'] = us_infections.apply(lambda row: str(row.Combined_Key).split('-')[1].strip(' '), axis = 1)
     
     return us_infections.groupby('state').sum()
@@ -41,7 +41,7 @@ def US_infections_by_state():
 ''' returns a dict containing each US city, its FIPS code and its state'''
 def US_FIPS():
     
-    us_infections=pd.read_csv(r"covid19/infections_timeseries.csv")
+    us_infections=pd.read_csv(r"covid19_datasets/infections_timeseries.csv")
     us_infections['state'] = us_infections.apply(lambda row: str(row.Combined_Key).split('-')[1].strip(' '), axis = 1)
     
     return us_infections[["FIPS","Combined_Key","state"]].set_index("FIPS")
@@ -50,7 +50,7 @@ def US_FIPS():
    simillar to the infections one'''
 def US_deaths_by_city():
     
-    us_deaths=pd.read_csv(r"covid19/deaths_timeseries.csv").drop(columns=["FIPS"])
+    us_deaths=pd.read_csv(r"covid19_datasets/deaths_timeseries.csv").drop(columns=["FIPS"])
     us_deaths['state'] = us_deaths.apply(lambda row: str(row.Combined_Key).split('-')[1].strip(' '), axis = 1)
     
     return dict(tuple(us_deaths.groupby('state')))
@@ -58,7 +58,7 @@ def US_deaths_by_city():
 
 def US_deaths_by_state():
     
-    us_deaths=pd.read_csv(r"covid19/deaths_timeseries.csv").drop(columns=["FIPS"])
+    us_deaths=pd.read_csv(r"covid19_datasets/deaths_timeseries.csv").drop(columns=["FIPS"])
     us_deaths['state'] = us_deaths.apply(lambda row: str(row.Combined_Key).split('-')[1].strip(' '), axis = 1)
     
     return us_deaths.groupby('state').sum()
@@ -67,7 +67,7 @@ def US_deaths_by_state():
 def US_interventions():
     states_abbreviations=US_abbreviations()
     
-    us_interventions=pd.read_csv(r"covid19/interventions.csv").drop(columns=["FIPS"],index=[0])
+    us_interventions=pd.read_csv(r"covid19_datasets/interventions.csv").drop(columns=["FIPS"],index=[0])
     for i in list(us_interventions.columns)[2:]:
         us_interventions[i] = us_interventions[i].dropna().apply(int).apply(date.fromordinal)
 
@@ -77,7 +77,7 @@ def US_interventions():
 def US_interventions_by_state():
     states_abbreviations=US_abbreviations()
     
-    us_interventions=pd.read_csv(r"covid19/interventions.csv").drop(columns=["FIPS"],index=[0])
+    us_interventions=pd.read_csv(r"covid19_datasets/interventions.csv").drop(columns=["FIPS"],index=[0])
     for i in list(us_interventions.columns)[2:]:
         us_interventions[i] = us_interventions[i].dropna().apply(int).apply(date.fromordinal)
     us_interventions['STATE'] = us_interventions.apply(lambda row: states_abbreviations[row.STATE] , axis = 1)
@@ -87,7 +87,8 @@ def US_interventions_by_state():
 '''contains the number of people visiting  places of interest such as hospitals supermarkets etc, for each US city from 1/3 to 21/3'''
 def US_poi_visits():
     FIPS=US_FIPS()
-    us_poi_visits=pd.read_csv(r"covid19/poi_visits.csv").set_index("FIPS")
+    
+    us_poi_visits=pd.read_csv(r"covid19_datasets/poi_visits.csv").set_index("FIPS")
     '''added columns of US state and city it belongs'''
     us_poi_visits['state'] = None
     us_poi_visits['Combined_Key'] = None
@@ -102,7 +103,8 @@ def US_poi_visits():
 
 def US_poi_visits_by_state():
     FIPS=US_FIPS()
-    us_poi_visits=pd.read_csv(r"covid19/poi_visits.csv").set_index("FIPS")
+    
+    us_poi_visits=pd.read_csv(r"covid19_datasets/poi_visits.csv").set_index("FIPS")
     
     us_poi_visits['state'] = None
     us_poi_visits['Combined_Key'] = None
@@ -118,7 +120,7 @@ def US_poi_visits_by_state():
 '''data from https://www.kaggle.com/sudalairajkumar/covid19-in-usa'''
 
 def US_tests():
-    tests=pd.read_csv(r"covid19\us_states_covid19_daily.csv")
+    tests=pd.read_csv(r"covid19_datasets\us_states_covid19_daily.csv")
 
     tests=tests.astype({'date': str}) #date format
     for i in range(2112):
