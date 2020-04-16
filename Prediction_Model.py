@@ -303,11 +303,9 @@ def model():
 
     return 0
 
-data_set = getattr(global_data,'data')
-x=data_set.get('general_country')
-print(x[x['pop']>'10000000000'])
 
 
-##settings()
-##model()
+
+settings()
+model()
 
