@@ -1,20 +1,22 @@
 import datetime
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.linear_model import Ridge
-from sklearn.preprocessing import PolynomialFeatures
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.linear_model import Ridge, RidgeCV
+from sklearn.preprocessing import PolynomialFeatures, MinMaxScaler
 import worldometer_scrapping
 from sklearn.utils import shuffle
 import math
 import sklearn.metrics as met
-from sklearn.linear_model import RidgeCV
+from joblib import dump,load
+
+
 
 
 ######################################
 import warnings
 warnings.filterwarnings("ignore")
 ######################################
+
 
 ############Settings########
 polynomial_features_check=1
@@ -24,6 +26,9 @@ scaling_check = 1
 shuffle_check = 1
 polynomial_order = 25
 print_scores = 0
+
+
+
 
 number_of_elements=2
 
@@ -37,7 +42,7 @@ thresh=0
 
 
 
-
+#Settings using global variables that are used in the rest of the functions
 def settings():
     global polynomial_features_check
     global print_data_check
@@ -82,7 +87,7 @@ def settings():
 
     return 0
 
-
+#Prints data
 def print_data(data,results):
     for i in range(len(data)):
         print(data[i],results[i])
@@ -90,7 +95,7 @@ def print_data(data,results):
     return 0
 
 
-
+#Shuffles, Scales and divides data
 def data_manipulation(X,Y):
 
     global thresh
@@ -102,7 +107,11 @@ def data_manipulation(X,Y):
 
     if scaling_check==1:
         min_max_scaler = MinMaxScaler()
-        X_temp = min_max_scaler.fit_transform(X)
+        min_max_scaler.fit(X)
+
+        
+        X_temp = min_max_scaler.transform(X)
+        dump(min_max_scaler,'scaler.joblib')
     else:
         X_temp=X
         
@@ -121,7 +130,7 @@ def data_manipulation(X,Y):
 
 
 
-
+#Finds the best order polynomial to make extra features with
 def polynomial_checking(X,Y,order_limit=25,print_scores=0):
 
 
@@ -170,12 +179,13 @@ def polynomial_checking(X,Y,order_limit=25,print_scores=0):
             max_score = score
     print("\nChosen polynomial order is:",power)
     poly = PolynomialFeatures(power)
-    X_scaled= poly.fit_transform(X)
-                
+    poly.fit(X)
+    X_scaled= poly.transform(X)
+    dump(poly,'poly.joblib')            
     return X_scaled
 
 
-
+#Finds the best regularization parameter
 def regularization_parameter(X,Y):
 
 
@@ -187,7 +197,7 @@ def regularization_parameter(X,Y):
     return model.alpha_
 
 
-
+#Trains the model
 def model():
 
     global thresh
@@ -232,7 +242,7 @@ def model():
 
     
 
-    
+    print(X)
     m=len(Y)
     thresh=int(0.15*m)
 
@@ -283,6 +293,7 @@ def model():
     Y_CV_pred = reg.predict(X_CV)
     Y_train_pred=reg.predict(X_train)
     
+    dump(reg,'R_model.joblib')
     
     print("\nTraining set fitting score:",met.r2_score(Y_train,Y_train_pred),"\nCV set fitting score",
           met.r2_score(Y_CV,Y_CV_pred),"\nTest set fitting score", met.r2_score(Y_test,Y_test_pred))
@@ -299,9 +310,40 @@ def model():
 
     plt.show()
 
+
+
     return 0
+
+
+
+#Function that predicts beta given new data X
+def predict(X):
+    X=X.reshape(1,-1)
+    
+    reg = load('R_model.joblib')
+    min_max_scaler = load('scaler.joblib')
+    poly = load('poly.joblib')
+
+    
+    if polynomial_features_check == 1:
+        
+        X = poly.transform(X)
+
+    if scaling_check==1:
+        
+        X =min_max_scaler.transform(X)
+
+
+    new_beta = reg.predict(X)
+
+    
+    return new_beta
+
+
 
 
 settings()
 model()
-
+num=np.array([2192,359])
+prediction= predict(num)
+print(prediction)
