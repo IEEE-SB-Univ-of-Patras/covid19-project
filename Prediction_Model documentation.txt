@@ -1,0 +1,61 @@
+Functions used:
+settings
+print_data
+data_manipulation
+polynomial_checking
+regularization_parameter
+model
+
+#############################################################
+settings():
+
+Prints the current (default) global setting variables
+
+Asks the user if he/she wants to change them
+
+If the he/she responds posotively the program explains to the user
+what the different values of the settings do and lets him/her decide
+if they want to alter them 
+
+Returns 0
+
+(For more info about the global variables see the end of the document)
+
+#############################################################
+print_data(data,results):
+
+Both data and results are numpy arrays (class 'numpy.ndarray')
+
+Data and results must have the same number of rows
+
+The function prints each row of data and of results
+
+Returns 0
+
+#############################################################
+data_manipulation(X,Y)
+
+Both X,Y are numpy arrays (class 'numpy.ndarray') 
+
+X contains the data that we have gathered (Infected etc.) and Y contains the
+value of β (transmission rate)
+
+Each row of X,Y contains the data corresponding to a certain day after the
+day that the first infected people had beed diagnosed
+
+Shuffles the data if chosen in settngs()
+
+Scales the data from 0 to 1 if chosen in settings()
+
+Divides both X and Y into training, counter-validation(CV) and testing sets
+Training set takes 60% of the data
+CV set takes 15% of the data
+Testing set takes 15% of the data
+
+Returns X_train,X_CV,X_test,Y_train,Y_CV,Y_test
+
+
+#############################################################
+polynomial_checking(X,Y,order_limit=25,print_scores
+
+
