@@ -1,13 +1,28 @@
 import datetime
 import matplotlib.pyplot as plt
 import numpy as np
+import worldometer_scrapping
+import math
+import pandas as pd
+import time
+
+from Data_organization import deliver_data
+from Data_organization import get_static
+from Data_organization import get_data_dicts
+from model_tools import calculate_beta
+from plot_learning_curve import plot_learning_curve
+
+
+
+
+from joblib import dump,load
 from sklearn.linear_model import Ridge, RidgeCV
 from sklearn.preprocessing import PolynomialFeatures, MinMaxScaler
-import worldometer_scrapping
 from sklearn.utils import shuffle
-import math
+from sklearn.model_selection import learning_curve
 import sklearn.metrics as met
-from joblib import dump,load
+from sklearn.model_selection import ShuffleSplit
+
 
 
 
@@ -24,9 +39,9 @@ print_data_check = 0
 regularization_check = 1
 scaling_check = 1
 shuffle_check = 1
-polynomial_order = 25
+polynomial_order = 5
 print_scores = 0
-
+download_option=0
 
 
 
@@ -148,7 +163,7 @@ def polynomial_checking(X,Y,order_limit=25,print_scores=0):
     for i in range(1,order_limit):
         X_temp=X
         
-        poly = PolynomialFeatures(i)
+        poly = PolynomialFeatures(i,interaction_only=True)
         X_temp = poly.fit_transform(X)
         
 
@@ -197,52 +212,47 @@ def regularization_parameter(X,Y):
     return model.alpha_
 
 
+
+def data_fetch():
+
+    dictionary=deliver_data()
+    firsttime=1
+    for i in dictionary:
+        
+        if firsttime==1:
+            X=dictionary[i]
+            Y=pd.DataFrame(calculate_beta(X))
+            firsttime=0
+            
+        else:
+            tempX=dictionary[i]
+            tempY=pd.DataFrame(calculate_beta(tempX))
+
+            X=pd.concat([X,tempX])
+            Y=pd.concat([Y,tempY])
+
+    X.to_csv('X.csv',index=False)
+    Y.to_csv('Y.csv',index=False)
+
+    return X,Y
+
+
+
 #Trains the model
 def model():
 
     global thresh
+    global download_option
 
-    data = worldometer_scrapping.mine_data(scope = 'Greece')
-
-    n = data["demographics"]["population"]
-
-    total_list = data["cases"]  
-    deaths_list = data["deaths"]  
-    R_list = data["recovered"] 
-    I_list = data["active"]  
-    S_list = []  
-    for i, val in enumerate(total_list):
-        S_list.append(n - val)  
-
-
-
-    X=np.array([0]*number_of_elements)
-    Y=np.array(0)
-    
+    if download_option==1:
+        trueX,trueY=data_fetch()
+    else:
+        trueX=pd.read_csv('X.csv')
+        trueY=pd.read_csv('Y.csv')
+        
 
     
-    for i in range(len(S_list)):
-
-        if I_list[i]==0:
-            continue
-
-        else:
-            
-            X=np.vstack([X,[I_list[i],R_list[i]]])
-                
-            
-                
-            if I_list[i-1]==0:
-                b=transmission_rate
-            else:
-                b=(S_list[i-1]-S_list[i])*n/(S_list[i-1]*I_list[i-1]+1)
-                if b>=0.245:
-                    b=0.245
-            Y=np.vstack([Y,[b]])
-
-    
-
-    print(X)
+    X,Y=trueX,trueY
     m=len(Y)
     thresh=int(0.15*m)
 
@@ -281,14 +291,20 @@ def model():
     else: a=0
     
 
+#Learning curves
+##    train_sizes=list(range(1,627,15))
+##    cv = ShuffleSplit(n_splits=100, test_size=0.2, random_state=0)
+##    plot_learning_curve(Ridge(alpha=a),'Learning Curves',X,Y,cv=50)
 
 
-
-
+    
 #Model training and predictions    
     reg = Ridge(alpha=a)
     reg.fit(X_train,Y_train)
 
+    
+
+    
     Y_test_pred = reg.predict(X_test)
     Y_CV_pred = reg.predict(X_CV)
     Y_train_pred=reg.predict(X_train)
@@ -298,17 +314,24 @@ def model():
     print("\nTraining set fitting score:",met.r2_score(Y_train,Y_train_pred),"\nCV set fitting score",
           met.r2_score(Y_CV,Y_CV_pred),"\nTest set fitting score", met.r2_score(Y_test,Y_test_pred))
 
+##    print(reg.coef_)
+##    print(trueX.columns.values)
+    plt.show()
+
+        
+
+
+    time.sleep(1)
 
     
-
-    S  = plt.scatter(X_train[:,indx],Y_train,color='red', s=1,marker = 'x',linewidths=None)
-    plt.scatter(X_test[:,indx],Y_test_pred,color = 'black', s=1)
-    plt.scatter(X_test[:,indx],Y_test,color = 'teal', s=1)
-
-
-
-
-    plt.show()
+##    S  = plt.scatter(X_train[:,indx],Y_train,color='red', s=1,marker = 'x',linewidths=None)
+##    plt.scatter(X_test[:,indx],Y_test_pred,color = 'black', s=1)
+##    plt.scatter(X_test[:,indx],Y_test,color = 'teal', s=1)
+##
+##
+##
+##
+##    plt.show()
 
 
 
@@ -317,8 +340,26 @@ def model():
 
 
 #Function that predicts beta given new data X
-def predict(X):
-    X=X.reshape(1,-1)
+def predict(X,country,scenario=False):
+
+    if len(X)>3:
+        scenario=True
+
+    static=get_static()
+    static_values=pd.Series(static[country])
+
+
+    X=pd.Series(X)
+    if not scenario:
+        _,measures = get_data_dicts()
+        measure_values=pd.Series(measures[country].iloc[-1])
+        X = pd.concat([X,measure_values,static_values],ignore_index=True,join='outer',axis=0)
+    
+    else:
+        X = pd.concat([X,static_values],ignore_index=True,join='outer',axis=0)
+
+
+    X=X.to_numpy().reshape(1,-1)   
     
     reg = load('R_model.joblib')
     min_max_scaler = load('scaler.joblib')
@@ -342,8 +383,6 @@ def predict(X):
 
 
 
-settings()
-model()
-num=np.array([2192,359])
-prediction= predict(num)
-print(prediction)
+##settings()
+##while(True):
+##    model()

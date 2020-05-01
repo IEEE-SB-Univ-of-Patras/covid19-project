@@ -1,30 +1,40 @@
 import sir_prediction as sir
-
+import math
 
 def calculate_beta(data):
     beta_list = []
     beta_list_smooth = []
-    N = data["N"]
-    S_list = data["S list"]
-    I_list = data["I list"]
+    N=data['pop'][0]
+    S_list=[]
+    
+    for i in data['total cases']:
+        S_list.append(N-i)
+        
+    I_list = data["active cases"]
     i_prev = I_list[0]
     s_prev = S_list[0]
     b_prev = 0
     alpha = 0.25
+    
+    
 
     for t in range(len(S_list)):
         s = S_list[t]
         b = (s_prev - s) / (s_prev * (i_prev + 1)) * N
         beta_list.append(b)
-        b_smooth = alpha * b + (1 - alpha) * b_prev
+        
+##        b_smooth = alpha * b + (1 - alpha) * b_prev
+        if b>1:
+            b_smooth= 1/(b**(1/2))
+        else:
+            b_smooth=alpha * b + (1 - alpha) * b_prev
         beta_list_smooth.append(b_smooth)
         i_prev = I_list[t]
         s_prev = s
         b_prev = b_smooth
 
-    data["beta_list"] = beta_list
-    data["beta_list_smooth"] = beta_list_smooth
-    return data
+    
+    return beta_list_smooth
 
 
 def calculate_gamma(data, lag=0, smooth=0.2):
