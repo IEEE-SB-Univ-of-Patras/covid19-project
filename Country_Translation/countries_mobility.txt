@@ -1,0 +1,63 @@
+ALB:Albania
+ARG:Argentina
+AUS:Australia
+AUT:Austria
+BEL:Belgium
+BRA:Brazil
+BGR:Bulgaria
+KHM:Cambodia
+CAN:Canada
+CHL:Chile
+COL:Colombia
+HRV:Croatia
+DNK:Denmark
+EGY:Egypt
+EST:Estonia
+FIN:Finland
+FRA:France
+DEU:Germany
+GRC:Greece
+HKG:Hong Kong
+HUN:Hungary
+ISL:Iceland
+IND:India
+IDN:Indonesia
+IRL:Ireland
+ISR:Israel
+ITA:Italy
+JPN:Japan
+LVA:Latvia
+LTU:Lithuania
+LUX:Luxembourg
+MAC:Macao
+MYS:Malaysia
+MEX:Mexico
+MAR:Morocco
+NLD:Netherlands
+NZL:New Zealand
+NOR:Norway
+PHL:Philippines
+POL:Poland
+PRT:Portugal
+ROU:Romania
+SAU:Saudi Arabia
+SRB:Serbia
+SGP:Singapore
+SVK:Slovakia
+SVN:Slovenia
+ZAF:South Africa
+ESP:Spain
+SWE:Sweden
+CHE:Switzerland
+THA:Thailand
+TUR:Turkey
+UKR:Ukraine
+ARE:United Arab Emirates
+URY:Uruguay
+VNM:Vietnam
+USA:United States
+GBR:UK
+TWN:Taiwan
+RUS:Russia
+KOR:Republic of Korea
+CZE:Czech Republic

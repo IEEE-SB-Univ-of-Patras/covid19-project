@@ -1,0 +1,148 @@
+AFG:Afghanistan
+ALB:Albania
+DZA:Algeria
+AND:Andorra
+AGO:Angola
+ARG:Argentina
+ABW:Aruba
+AUS:Australia
+AUT:Austria
+AZE:Azerbaijan
+BHR:Bahrain
+BGD:Bangladesh
+BRB:Barbados
+BEL:Belgium
+BLZ:Belize
+BMU:Bermuda
+BIH:Bosnia and Herzegovina
+BWA:Botswana
+BRA:Brazil
+BGR:Bulgaria
+BFA:Burkina Faso
+BDI:Burundi
+CMR:Cameroon
+CAN:Canada
+TCD:Chad
+CHL:Chile
+CHN:China
+COL:Colombia
+CRI:Costa Rica
+HRV:Croatia
+CUB:Cuba
+CYP:Cyprus
+DNK:Denmark
+DJI:Djibouti
+DMA:Dominica
+DOM:Dominican Republic
+ECU:Ecuador
+EGY:Egypt
+SLV:El Salvador
+EST:Estonia
+SWZ:Eswatini
+ETH:Ethiopia
+FIN:Finland
+FRA:France
+GAB:Gabon
+GMB:Gambia
+DEU:Germany
+GHA:Ghana
+GRC:Greece
+GRL:Greenland
+GUM:Guam
+GTM:Guatemala
+GUY:Guyana
+HND:Honduras
+HKG:Hong Kong
+HUN:Hungary
+ISL:Iceland
+IND:India
+IDN:Indonesia
+IRQ:Iraq
+IRL:Ireland
+ISR:Israel
+ITA:Italy
+JAM:Jamaica
+JPN:Japan
+JOR:Jordan
+KAZ:Kazakhstan
+KEN:Kenya
+KWT:Kuwait
+LBN:Lebanon
+LSO:Lesotho
+LBY:Libya
+LUX:Luxembourg
+MAC:Macao
+MDG:Madagascar
+MWI:Malawi
+MYS:Malaysia
+MLI:Mali
+MRT:Mauritania
+MUS:Mauritius
+MEX:Mexico
+MNG:Mongolia
+MAR:Morocco
+MOZ:Mozambique
+MMR:Myanmar
+NAM:Namibia
+NLD:Netherlands
+NZL:New Zealand
+NIC:Nicaragua
+NER:Niger
+NGA:Nigeria
+NOR:Norway
+OMN:Oman
+PAK:Pakistan
+PAN:Panama
+PNG:Papua New Guinea
+PRY:Paraguay
+PER:Peru
+PHL:Philippines
+POL:Poland
+PRT:Portugal
+PRI:Puerto Rico
+QAT:Qatar
+ROU:Romania
+RWA:Rwanda
+SMR:San Marino
+SAU:Saudi Arabia
+SRB:Serbia
+SYC:Seychelles
+SLE:Sierra Leone
+SGP:Singapore
+SVN:Slovenia
+ZAF:South Africa
+SSD:South Sudan
+ESP:Spain
+LKA:Sri Lanka
+SDN:Sudan
+SWE:Sweden
+CHE:Switzerland
+THA:Thailand
+TTO:Trinidad and Tobago
+TUN:Tunisia
+TUR:Turkey
+UGA:Uganda
+UKR:Ukraine
+ARE:United Arab Emirates
+URY:Uruguay
+UZB:Uzbekistan
+ZMB:Zambia
+ZWE:Zimbabwe
+BOL:Bolivia
+BRN:Brunei
+CZE:Czech Republic
+COD:Democratic Republic of Congo
+IRN:Iran
+LAO:Laos
+MDA:Moldova
+PSE:Palestine
+RUS:Russia
+SVK:Slovak Republic
+KOR:South Korea
+SYR:Syria
+TWN:Taiwan
+TZA:Tanzania
+GBR:United Kingdom
+USA:United States
+VEN:Venezuela
+VNM:Vietnam
